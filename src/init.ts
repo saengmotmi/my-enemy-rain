@@ -16,5 +16,5 @@ export default function () {
 
   arr
     .map(({ x, y, speed }) => new Ghost(x, y, speed, hero))
-    .forEach((ghost) => ghost.render());
+    .forEach((ghost) => ghost.render().start());
 }

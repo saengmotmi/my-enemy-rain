@@ -16,6 +16,7 @@ const createGhost = ({ x, y }: Omit<GhostProps, "speed">) => {
   ghost.style.overflow = "hidden";
   ghost.style.backgroundImage = "url(/src/assets/images/enemy.png)";
   ghost.style.zIndex = "1";
+  ghost.style.transform = "translateY(0)";
 
   return ghost;
 };
@@ -35,7 +36,20 @@ export default class Ghost {
   }
 
   render() {
-    console.log(this.bg, this.ghost);
     this.bg.appendChild(this.ghost);
+    return this;
+  }
+
+  start() {
+    const interval = setInterval(() => {
+      this.y += this.speed;
+      this.ghost.style.transform = `translateY(${this.y}px)`;
+
+      if (this.y >= 500) {
+        clearInterval(interval);
+      }
+    }, 100);
+
+    return this;
   }
 }
