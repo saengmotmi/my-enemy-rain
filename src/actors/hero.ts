@@ -1,3 +1,5 @@
-export default class Hero {
+export class Hero {
   constructor() {}
 }
+
+export const hero = new Hero();
