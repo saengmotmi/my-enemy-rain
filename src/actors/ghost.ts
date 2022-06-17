@@ -1,3 +1,4 @@
+import { GHOST_WIDTH } from "../config";
 import { Hero } from "./hero";
 
 interface GhostProps {
@@ -17,6 +18,7 @@ export class Ghost {
     private speed: number,
     private hero: Hero
   ) {
+    // 인스턴스 생성
     this.ghost = createGhost({ x, y });
     this.bg = document.querySelector("#bg") || document.createElement("div");
   }
@@ -31,10 +33,13 @@ export class Ghost {
       this.y += this.speed;
       this.ghost.style.transform = `translateY(${this.y}px)`;
 
-      if (this.y >= 500) {
-        this.killed();
+      const isEndBoarder = this.y >= 500;
+      // 피격판정 조건 추가 필요 - this.hero
+
+      if (isEndBoarder) {
+        this.killed("end");
       }
-    }, 100);
+    }, 10);
 
     return this;
   }
@@ -48,9 +53,9 @@ export class Ghost {
     return this;
   }
 
-  killed() {
+  killed(reason: "end" | "hero") {
     this.stop();
-    this.ghost.style.backgroundPositionX = "45px"; // 사망 애니메이션
+    this.ghost.style.backgroundPositionX = `${GHOST_WIDTH}px`; // 사망 애니메이션
     return this;
   }
 }
@@ -59,14 +64,13 @@ const createGhost = ({ x, y }: Omit<GhostProps, "speed">) => {
   const ghost = document.createElement("div");
   ghost.style.cssText = `
     position: absolute;
-    top: ${y}px;
     left: ${x}px;
-    width: 45px;
+    width: ${GHOST_WIDTH}px;
     height: 54px;
     overflow: hidden;
     background-image: url(/src/assets/images/enemy.png);
     z-index: 1;
-    transform: translateY(0);
+    transform: translateY(${y}px);
   `;
   return ghost;
 };
