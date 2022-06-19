@@ -13,9 +13,9 @@ interface GhostProps {
 }
 
 export class Ghost {
-  private ghost: HTMLDivElement;
+  public ghostDom: HTMLDivElement;
   private interval!: number | null;
-  private status: "alive" | "dead" = "alive";
+  public status: "alive" | "dead" = "alive";
 
   constructor(
     public x: number,
@@ -25,13 +25,14 @@ export class Ghost {
     private game: Game
   ) {
     // 인스턴스 생성
-    this.ghost = createGhost({ x, y });
+    this.ghostDom = createGhost({ x, y });
     this.game.bg =
       document.querySelector("#bg") || document.createElement("div");
+    this.game.ghosts.push(this);
   }
 
   render() {
-    this.game.bg.appendChild(this.ghost);
+    this.game.bg.appendChild(this.ghostDom);
     return this;
   }
 
@@ -39,7 +40,7 @@ export class Ghost {
     this.interval = setInterval(() => {
       this.y += this.stageSetting.ghostSpeed;
 
-      setStyleAttribute(this.ghost, {
+      setStyleAttribute(this.ghostDom, {
         transform: `translateY(${this.y}px)`,
       });
 
@@ -66,7 +67,7 @@ export class Ghost {
 
   killed(reason: "end" | "hero") {
     this.stop();
-    setStyleAttribute(this.ghost, {
+    setStyleAttribute(this.ghostDom, {
       "background-position-x": `${GHOST_WIDTH}px`,
     }); // 사망 애니메이션
 
@@ -83,7 +84,9 @@ export class Ghost {
         break;
     }
 
-    this.status === "dead";
+    this.status = "dead";
+
+    this.game.checkAllGhostsDead();
 
     return this;
   }
@@ -91,6 +94,7 @@ export class Ghost {
 
 const createGhost = ({ x, y }: Pick<GhostProps, "x" | "y">) => {
   const ghost = document.createElement("div");
+  ghost.className = "ghost";
   setStyleAttribute(ghost, {
     position: "absolute",
     left: `${x}px`,

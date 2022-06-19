@@ -10,7 +10,7 @@ interface HeroProps {
 }
 
 export class Hero {
-  private hero: HTMLDivElement;
+  public heroDom: HTMLDivElement;
 
   constructor(
     public x: number,
@@ -19,19 +19,20 @@ export class Hero {
     private game: Game
   ) {
     // 인스턴스 생성
-    this.hero = createHero({ x, y });
+    this.heroDom = createHero({ x, y });
     this.game = game;
+    this.game.hero = this;
 
     // 이벤트 리스너 생성
     document.addEventListener("keydown", (e) => this.move(e));
     document.addEventListener("keyup", () => {
       // Face up
-      this.hero.style.backgroundPositionX = "0px";
+      this.heroDom.style.backgroundPositionX = "0px";
     });
   }
 
   render() {
-    this.game.bg.appendChild(this.hero);
+    this.game.bg.appendChild(this.heroDom);
     return this;
   }
 
@@ -41,14 +42,14 @@ export class Hero {
     switch (direction) {
       case "ArrowLeft":
         this.x -= this.speed;
-        setStyleAttribute(this.hero, {
+        setStyleAttribute(this.heroDom, {
           "background-position-x": `${HERO_WIDTH * 2}px`,
         });
         break;
 
       case "ArrowRight":
         this.x += this.speed;
-        setStyleAttribute(this.hero, {
+        setStyleAttribute(this.heroDom, {
           "background-position-x": `${HERO_WIDTH}px`,
         });
         break;
@@ -56,7 +57,7 @@ export class Hero {
       default:
         break;
     }
-    setStyleAttribute(this.hero, {
+    setStyleAttribute(this.heroDom, {
       transform: `translateX(${this.x}px)`,
     });
 
@@ -66,6 +67,7 @@ export class Hero {
 
 const createHero = ({ x, y }: Pick<HeroProps, "x" | "y">) => {
   const hero = document.createElement("div");
+  hero.id = "hero";
   setStyleAttribute(hero, {
     position: "absolute",
     top: `${y}px`,

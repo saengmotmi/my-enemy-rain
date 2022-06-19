@@ -1,7 +1,6 @@
 import { Ghost, Hero } from "../index";
 import {
   BACKGROUND_WIDTH,
-  GHOSTS_PER_STAGE,
   GHOST_WIDTH,
   HERO_HEIGHT,
   HERO_WIDTH,
@@ -20,14 +19,15 @@ const getGhostSpawnPosition = () => {
 // };
 
 export const spawnGhosts = (hero: Hero) => {
-  const ghostArr = [...Array(GHOSTS_PER_STAGE)].map(() => ({
+  const currentStageSetting = game.stageSettings[game.stageIndex];
+
+  const ghostArr = [...Array(currentStageSetting.ghostCount)].map(() => ({
     x: getGhostSpawnPosition(),
     y: 0,
   }));
 
   return ghostArr.map(
-    ({ x, y }) =>
-      new Ghost(x, y, game.stageSettings[game.stageIndex], hero, game)
+    ({ x, y }) => new Ghost(x, y, currentStageSetting, hero, game)
   ); // 속도는 스테이지별로 바뀌게 할 것
 };
 
