@@ -1,5 +1,5 @@
-import { spawnGhosts, startGhosts } from "./actors/ghost/actions";
 import { initHero } from "./actors/hero/actions";
+import game from "./components/game";
 import "./style.scss";
 
 export default function () {
@@ -9,7 +9,5 @@ export default function () {
   const hero = initHero();
   hero.render();
 
-  // 고스트 초기화
-  const ghosts = spawnGhosts(hero);
-  startGhosts(ghosts);
+  game.startStage();
 }

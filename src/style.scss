@@ -33,8 +33,7 @@ body {
   gap: 8px;
   padding-top: 60px;
 
-  #score_board,
-  #life_board {
+  > div {
     border: 1px solid black;
   }
 }

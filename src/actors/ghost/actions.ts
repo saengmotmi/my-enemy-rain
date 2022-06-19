@@ -19,7 +19,7 @@ const getGhostSpawnPosition = () => {
 // };
 
 export const spawnGhosts = (hero: Hero) => {
-  const currentStageSetting = game.stageSettings[game.stageIndex];
+  const currentStageSetting = game.stageSettings[game.stageLevel - 1];
 
   const ghostArr = [...Array(currentStageSetting.ghostCount)].map(() => ({
     x: getGhostSpawnPosition(),
@@ -35,12 +35,12 @@ export const startGhosts = (ghosts: Ghost[]) => {
   let count = 0;
 
   const interval = setInterval(() => {
+    if (count === ghosts.length || game.status === "gameOver") {
+      clearInterval(interval);
+      return;
+    }
     ghosts[count].render().start();
     count++;
-
-    if (count === ghosts.length) {
-      clearInterval(interval);
-    }
   }, 2000);
 };
 

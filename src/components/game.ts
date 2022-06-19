@@ -11,15 +11,19 @@ export interface StageSetting {
 }
 
 export class Game {
+  public stage: HTMLDivElement;
   public bg: HTMLDivElement;
   public scoreBoard: HTMLDivElement;
   public life: HTMLDivElement;
   public stageSettings: StageSetting[];
-  public stageIndex: number = 0;
+  public stageLevel: number = 0;
   public ghosts: Ghost[] = [];
   public hero: Hero | null = null;
+  public status: "ready" | "playing" | "gameOver" = "ready";
 
   constructor() {
+    this.stage =
+      document.querySelector("#stage_value") || document.createElement("div");
     this.bg = document.querySelector("#bg") || document.createElement("div");
     this.scoreBoard =
       document.querySelector("#score_value") || document.createElement("div");
@@ -29,6 +33,10 @@ export class Game {
   }
 
   startStage() {
+    this.status = "playing";
+    this.stageLevel++;
+    this.stage.innerHTML = String(this.stageLevel);
+
     if (this.hero) {
       // 고스트 초기화
       const ghosts = spawnGhosts(this.hero);
@@ -37,6 +45,7 @@ export class Game {
   }
 
   endGame() {
+    this.status = "gameOver";
     if (this.hero) {
       this.resetStage();
       this.hero.heroDom.remove();
@@ -68,16 +77,13 @@ export class Game {
       (ghost) => ghost.status === "dead"
     );
     if (isAllGhostsDead) {
-      this.stageIndex++;
-
-      if (this.stageIndex === this.stageSettings.length) {
+      if (this.stageLevel === this.stageSettings.length) {
         alert("모든 스테이지를 클리어하셨습니다!");
         return;
       }
 
-      alert("다음 스테이지로 넘어갑니다.");
-
       this.resetStage();
+      alert("다음 스테이지로 넘어갑니다.");
       this.startStage();
       return;
     }
