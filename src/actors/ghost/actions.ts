@@ -19,7 +19,7 @@ const getGhostSpawnPosition = () => {
 // };
 
 export const spawnGhosts = (hero: Hero) => {
-  const currentStageSetting = game.stageSettings[game.stageLevel - 1];
+  const currentStageSetting = game.stage.settings[game.stage.level - 1];
 
   const ghostArr = [...Array(currentStageSetting.ghostCount)].map(() => ({
     x: getGhostSpawnPosition(),

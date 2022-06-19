@@ -1,7 +1,9 @@
 import { Ghost } from "../actors/ghost";
 import { spawnGhosts, startGhosts } from "../actors/ghost/actions";
 import { Hero } from "../actors/hero";
-import { stageSettings } from "../config";
+import Background from "./background";
+import Score from "./score";
+import Stage from "./stage";
 
 export interface StageSetting {
   stage: number;
@@ -11,31 +13,23 @@ export interface StageSetting {
 }
 
 export class Game {
-  public stage: HTMLDivElement;
-  public bg: HTMLDivElement;
-  public scoreBoard: HTMLDivElement;
-  public life: HTMLDivElement;
-  public stageSettings: StageSetting[];
-  public stageLevel: number = 0;
+  public stage: Stage;
+  public bg: Background;
+  public score: Score;
   public ghosts: Ghost[] = [];
   public hero: Hero | null = null;
   public status: "ready" | "playing" | "gameOver" = "ready";
 
   constructor() {
-    this.stage =
-      document.querySelector("#stage_value") || document.createElement("div");
-    this.bg = document.querySelector("#bg") || document.createElement("div");
-    this.scoreBoard =
-      document.querySelector("#score_value") || document.createElement("div");
-    this.life =
-      document.querySelector("#life_value") || document.createElement("div");
-    this.stageSettings = stageSettings;
+    this.stage = new Stage();
+    this.bg = new Background();
+    this.score = new Score();
   }
 
   startStage() {
     this.status = "playing";
-    this.stageLevel++;
-    this.stage.innerHTML = String(this.stageLevel);
+    this.stage.level++;
+    this.stage.dom.innerHTML = String(this.stage.level);
 
     if (this.hero) {
       // 고스트 초기화
@@ -65,7 +59,7 @@ export class Game {
   }
 
   checkAllGhostsDead() {
-    const isLifeRemain = Number(this.life.innerText) > 0;
+    const isLifeRemain = Number(this.score.lifeDom.innerText) > 0;
     if (!isLifeRemain) {
       alert("게임 오버입니다.");
       this.endGame();
@@ -77,7 +71,7 @@ export class Game {
       (ghost) => ghost.status === "dead"
     );
     if (isAllGhostsDead) {
-      if (this.stageLevel === this.stageSettings.length) {
+      if (this.stage.level === this.stage.settings.length) {
         alert("모든 스테이지를 클리어하셨습니다!");
         return;
       }
