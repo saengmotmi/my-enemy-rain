@@ -10,7 +10,7 @@ interface HeroProps {
 }
 
 export class Hero {
-  public heroDom: HTMLDivElement;
+  public dom: HTMLDivElement;
 
   constructor(
     public x: number,
@@ -19,7 +19,7 @@ export class Hero {
     private game: Game
   ) {
     // 인스턴스 생성
-    this.heroDom = createHero({ x, y });
+    this.dom = createHero({ x, y });
     this.game = game;
     this.game.hero = this;
 
@@ -27,12 +27,12 @@ export class Hero {
     document.addEventListener("keydown", (e) => this.move(e));
     document.addEventListener("keyup", () => {
       // Face up
-      this.heroDom.style.backgroundPositionX = "0px";
+      this.dom.style.backgroundPositionX = "0px";
     });
   }
 
   render() {
-    this.game.bg.dom.appendChild(this.heroDom);
+    this.game.bg.dom.appendChild(this.dom);
     return this;
   }
 
@@ -42,14 +42,14 @@ export class Hero {
     switch (direction) {
       case "ArrowLeft":
         this.x -= this.speed;
-        setStyleAttribute(this.heroDom, {
+        setStyleAttribute(this.dom, {
           "background-position-x": `${HERO_WIDTH * 2}px`,
         });
         break;
 
       case "ArrowRight":
         this.x += this.speed;
-        setStyleAttribute(this.heroDom, {
+        setStyleAttribute(this.dom, {
           "background-position-x": `${HERO_WIDTH}px`,
         });
         break;
@@ -57,7 +57,7 @@ export class Hero {
       default:
         break;
     }
-    setStyleAttribute(this.heroDom, {
+    setStyleAttribute(this.dom, {
       transform: `translateX(${this.x}px)`,
     });
 

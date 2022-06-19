@@ -42,7 +42,7 @@ export class Game {
     this.status = "gameOver";
     if (this.hero) {
       this.resetStage();
-      this.hero.heroDom.remove();
+      this.hero.dom.remove();
 
       this.ghosts = [];
       this.hero = null;
@@ -53,7 +53,7 @@ export class Game {
     // TODO: 스테이지 초기화
     this.ghosts.forEach((ghost) => {
       ghost.stop();
-      ghost.ghostDom.remove();
+      ghost.dom.remove();
     });
     this.ghosts = [];
   }

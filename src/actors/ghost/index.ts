@@ -13,7 +13,7 @@ interface GhostProps {
 }
 
 export class Ghost {
-  public ghostDom: HTMLDivElement;
+  public dom: HTMLDivElement;
   private interval!: number | null;
   public status: "alive" | "dead" = "alive";
 
@@ -25,14 +25,14 @@ export class Ghost {
     private game: Game
   ) {
     // 인스턴스 생성
-    this.ghostDom = createGhost({ x, y });
+    this.dom = createGhost({ x, y });
     this.game.bg.dom =
       document.querySelector("#bg") || document.createElement("div");
     this.game.ghosts.push(this);
   }
 
   render() {
-    this.game.bg.dom.appendChild(this.ghostDom);
+    this.game.bg.dom.appendChild(this.dom);
     return this;
   }
 
@@ -40,7 +40,7 @@ export class Ghost {
     this.interval = setInterval(() => {
       this.y += this.stageSetting.ghostSpeed;
 
-      setStyleAttribute(this.ghostDom, {
+      setStyleAttribute(this.dom, {
         transform: `translateY(${this.y}px)`,
       });
 
@@ -67,7 +67,7 @@ export class Ghost {
 
   killed(reason: "end" | "hero") {
     this.stop();
-    setStyleAttribute(this.ghostDom, {
+    setStyleAttribute(this.dom, {
       "background-position-x": `${GHOST_WIDTH}px`,
     }); // 사망 애니메이션
 
