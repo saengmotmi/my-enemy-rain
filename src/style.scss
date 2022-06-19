@@ -16,7 +16,7 @@ body {
 }
 
 #bg {
-  position: relative;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -25,4 +25,16 @@ body {
   background-position: center;
   width: 800px;
   height: 600px;
+}
+
+#game_header {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding-top: 60px;
+
+  #score_board,
+  #life_board {
+    border: 1px solid black;
+  }
 }

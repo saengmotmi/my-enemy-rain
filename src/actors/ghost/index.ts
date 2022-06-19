@@ -2,37 +2,42 @@ import { isCollision } from "./actions";
 import { GHOST_WIDTH } from "../../config";
 import { setStyleAttribute } from "../../utils";
 import { Hero } from "../hero";
+import { Game, StageSetting } from "../../components/game";
 
 interface GhostProps {
   x: number;
   y: number;
   speed: number;
+  hero: Hero;
+  game: Game;
 }
 
 export class Ghost {
   private ghost: HTMLDivElement;
-  private bg: HTMLDivElement;
   private interval!: number | null;
+  private status: "alive" | "dead" = "alive";
 
   constructor(
     public x: number,
     public y: number,
-    private speed: number,
-    private hero: Hero
+    private stageSetting: StageSetting,
+    private hero: Hero,
+    private game: Game
   ) {
     // 인스턴스 생성
     this.ghost = createGhost({ x, y });
-    this.bg = document.querySelector("#bg") || document.createElement("div");
+    this.game.bg =
+      document.querySelector("#bg") || document.createElement("div");
   }
 
   render() {
-    this.bg.appendChild(this.ghost);
+    this.game.bg.appendChild(this.ghost);
     return this;
   }
 
   start() {
     this.interval = setInterval(() => {
-      this.y += this.speed;
+      this.y += this.stageSetting.ghostSpeed;
 
       setStyleAttribute(this.ghost, {
         transform: `translateY(${this.y}px)`,
@@ -61,18 +66,30 @@ export class Ghost {
 
   killed(reason: "end" | "hero") {
     this.stop();
-
     setStyleAttribute(this.ghost, {
       "background-position-x": `${GHOST_WIDTH}px`,
     }); // 사망 애니메이션
 
-    console.log(reason);
+    switch (reason) {
+      case "end":
+        this.game.life.innerHTML = String(Number(this.game.life.innerHTML) - 1);
+        break;
+      case "hero":
+        this.game.scoreBoard.innerHTML = String(
+          Number(this.game.scoreBoard.innerHTML) + 1
+        );
+        break;
+      default:
+        break;
+    }
+
+    this.status === "dead";
 
     return this;
   }
 }
 
-const createGhost = ({ x, y }: Omit<GhostProps, "speed">) => {
+const createGhost = ({ x, y }: Pick<GhostProps, "x" | "y">) => {
   const ghost = document.createElement("div");
   setStyleAttribute(ghost, {
     position: "absolute",

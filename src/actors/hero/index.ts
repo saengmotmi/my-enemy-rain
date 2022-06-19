@@ -1,3 +1,4 @@
+import { Game } from "../../components/game";
 import { HERO_WIDTH } from "../../config";
 import { setStyleAttribute } from "../../utils";
 
@@ -5,16 +6,21 @@ interface HeroProps {
   x: number;
   y: number;
   speed: number;
+  game: Game;
 }
 
 export class Hero {
   private hero: HTMLDivElement;
-  private bg: HTMLDivElement;
 
-  constructor(public x: number, public y: number, private speed: number) {
+  constructor(
+    public x: number,
+    public y: number,
+    private speed: number,
+    private game: Game
+  ) {
     // 인스턴스 생성
     this.hero = createHero({ x, y });
-    this.bg = document.querySelector("#bg") || document.createElement("div");
+    this.game = game;
 
     // 이벤트 리스너 생성
     document.addEventListener("keydown", (e) => this.move(e));
@@ -25,7 +31,7 @@ export class Hero {
   }
 
   render() {
-    this.bg.appendChild(this.hero);
+    this.game.bg.appendChild(this.hero);
     return this;
   }
 
@@ -58,7 +64,7 @@ export class Hero {
   }
 }
 
-const createHero = ({ x, y }: Omit<HeroProps, "speed">) => {
+const createHero = ({ x, y }: Pick<HeroProps, "x" | "y">) => {
   const hero = document.createElement("div");
   setStyleAttribute(hero, {
     position: "absolute",
