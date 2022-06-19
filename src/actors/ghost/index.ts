@@ -26,13 +26,13 @@ export class Ghost {
   ) {
     // 인스턴스 생성
     this.ghostDom = createGhost({ x, y });
-    this.game.bg =
+    this.game.bg.dom =
       document.querySelector("#bg") || document.createElement("div");
     this.game.ghosts.push(this);
   }
 
   render() {
-    this.game.bg.appendChild(this.ghostDom);
+    this.game.bg.dom.appendChild(this.ghostDom);
     return this;
   }
 
@@ -73,11 +73,13 @@ export class Ghost {
 
     switch (reason) {
       case "end":
-        this.game.life.innerHTML = String(Number(this.game.life.innerHTML) - 1);
+        this.game.score.lifeDom.innerHTML = String(
+          Number(this.game.score.lifeDom.innerHTML) - 1
+        );
         break;
       case "hero":
-        this.game.scoreBoard.innerHTML = String(
-          Number(this.game.scoreBoard.innerHTML) + 1
+        this.game.score.scoreDom.innerHTML = String(
+          Number(this.game.score.scoreDom.innerHTML) + 1
         );
         break;
       default:

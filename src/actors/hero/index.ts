@@ -32,7 +32,7 @@ export class Hero {
   }
 
   render() {
-    this.game.bg.appendChild(this.heroDom);
+    this.game.bg.dom.appendChild(this.heroDom);
     return this;
   }
 
