@@ -1,4 +1,6 @@
+import { isCollision } from "../actions";
 import { GHOST_WIDTH } from "../config";
+import { setStyleAttribute } from "../utils";
 import { Hero } from "./hero";
 
 interface GhostProps {
@@ -13,8 +15,8 @@ export class Ghost {
   private interval!: number | null;
 
   constructor(
-    private x: number,
-    private y: number,
+    public x: number,
+    public y: number,
     private speed: number,
     private hero: Hero
   ) {
@@ -31,13 +33,17 @@ export class Ghost {
   start() {
     this.interval = setInterval(() => {
       this.y += this.speed;
-      this.ghost.style.transform = `translateY(${this.y}px)`;
 
-      const isEndBoarder = this.y >= 500;
-      // 피격판정 조건 추가 필요 - this.hero
+      setStyleAttribute(this.ghost, {
+        transform: `translateY(${this.y}px)`,
+      });
 
-      if (isEndBoarder) {
+      const isEndBorder = this.y >= 500;
+      if (isEndBorder) {
         this.killed("end");
+      }
+      if (isCollision(this, this.hero)) {
+        this.killed("hero");
       }
     }, 10);
 
@@ -55,22 +61,28 @@ export class Ghost {
 
   killed(reason: "end" | "hero") {
     this.stop();
-    this.ghost.style.backgroundPositionX = `${GHOST_WIDTH}px`; // 사망 애니메이션
+
+    setStyleAttribute(this.ghost, {
+      "background-position-x": `${GHOST_WIDTH}px`,
+    }); // 사망 애니메이션
+
+    console.log(reason);
+
     return this;
   }
 }
 
 const createGhost = ({ x, y }: Omit<GhostProps, "speed">) => {
   const ghost = document.createElement("div");
-  ghost.style.cssText = `
-    position: absolute;
-    left: ${x}px;
-    width: ${GHOST_WIDTH}px;
-    height: 54px;
-    overflow: hidden;
-    background-image: url(/src/assets/images/enemy.png);
-    z-index: 1;
-    transform: translateY(${y}px);
-  `;
+  setStyleAttribute(ghost, {
+    position: "absolute",
+    left: `${x}px`,
+    width: `${GHOST_WIDTH}px`,
+    height: "54px",
+    overflow: "hidden",
+    "background-image": "url(/src/assets/images/enemy.png)",
+    "z-index": "1",
+    transform: `translateY(${y}px)`,
+  });
   return ghost;
 };
