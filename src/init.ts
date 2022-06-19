@@ -1,5 +1,5 @@
-import { spawnGhosts, startGhosts } from "./actions/ghost";
-import { initHero } from "./actions/hero";
+import { spawnGhosts, startGhosts } from "./actors/ghost/actions";
+import { initHero } from "./actors/hero/actions";
 import "./style.scss";
 
 export default function () {

@@ -1,7 +1,7 @@
-import { isCollision } from "../actions";
-import { GHOST_WIDTH } from "../config";
-import { setStyleAttribute } from "../utils";
-import { Hero } from "./hero";
+import { isCollision } from "./actions";
+import { GHOST_WIDTH } from "../../config";
+import { setStyleAttribute } from "../../utils";
+import { Hero } from "../hero";
 
 interface GhostProps {
   x: number;

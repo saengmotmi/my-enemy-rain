@@ -1,11 +1,11 @@
-import { Ghost, Hero } from "../actors";
+import { Ghost, Hero } from "../index";
 import {
   BACKGROUND_WIDTH,
   GHOSTS_PER_STAGE,
   GHOST_WIDTH,
   HERO_HEIGHT,
   HERO_WIDTH,
-} from "../config";
+} from "../../config";
 
 const getGhostSpawnPosition = () => {
   return Math.random() * (BACKGROUND_WIDTH - GHOST_WIDTH);

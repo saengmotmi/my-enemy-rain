@@ -1,5 +1,5 @@
-import { HERO_WIDTH } from "../config";
-import { setStyleAttribute } from "../utils";
+import { HERO_WIDTH } from "../../config";
+import { setStyleAttribute } from "../../utils";
 
 interface HeroProps {
   x: number;
